@@ -2,11 +2,12 @@
  */
 package diceroller;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
+import java.util.regex.Matcher;
+
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.Arrays;
 
 /**
  * @author Kate Rutersmith
@@ -21,7 +22,7 @@ class DicePool
         NumDice = NumDice0;
         DieFaces = DieFaces0;
         Constant = Constant0;
-        Results = RollDice(NumDice0,DieFaces0);
+        //Results = RollDice(NumDice0,DieFaces0);
     }
     
     public static int[] RollDice(int NumDice, int DieFaces)
@@ -38,47 +39,67 @@ class DicePool
         
         //int first_die_value = (int) (Math.random() * num_sides) + 1;
     }
-    
 }
 
-public class DiceRoller {
-
+public class DiceRoller
+{
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    if (args.length == 0)
+    public static void main(String[] args)
     {
-        System.out.println("No arguments given. Using default values.");
-        //num_sides = Integer.parseInt(args[0]);
+        // TODO code application logic here
+    
+        int NumDice = 1; //default value for number of dice to roll
+        int DieFaces = 6; //default value for number of faces per die
+        int Constant = 0; //default value for number to add/subtract to the result 
+    
+        if (args.length == 0)
+        {
+            System.out.println("No arguments given. Using default values.");
+            //num_sides = Integer.parseInt(args[0]);
+        }
+    
+        checkString("25d6+1");
+        //checkString("0d0-0");
     }
     
-    //System.out.println("Test Println.");
+    //Regex patterns to split the user input into three substrings (which eventually become integers).
     
-    String ToParse = "15d20+11";
-    String[] SplitArray = ToParse.toLowerCase().split("d");
-    String NumDice = SplitArray[0];
-    String Remainder = SplitArray[1];
+    //Match a numeric value with any integer of digits (\d+), then d, then another integer (\d+)
+    //ex: 12d20
+    private static Pattern twopart = Pattern.compile("(\\d+)d(\\d+)");
     
+    //Match numeric value with any integer of digits (\d+), then d, then another number, then a plus or minus sign, then another integer
+    //ex: 8d6+12
+    private static Pattern fourpart = Pattern.compile("(\\d+)d(\\d+)([+-])(\\d+)");
     
-    //if (Remainder.contains("+"))
-    //        String[] SplitByOperator = Remainder.split("+");
-    //else if (Remainder.contains("-"))
-    //        String[] SplitByOperator = Remainder.split("+");
-    
-    //System.out.println(part1 + " " + part2);
+    public static void checkString(String s)
+    {
+        //remove whitespace from string and convert to lowercase
+        String toMatch = s.toLowerCase().replaceAll("\\s", "");
+        
+        Matcher m = fourpart.matcher(toMatch);
+        if (m.matches()) 
+        {
+            System.out.println(s + " matches; NumDice = " + m.group(1) +
+                               "; DieFaces = " + m.group(2) +
+                               "; Operator = " + m.group(3) +
+                               "; Constant = " + m.group(4) +
+                               ".");
+        } else
+        {
+            Matcher m2 = twopart.matcher(toMatch);
+                    if (m2.matches()) 
+                    {
+                        System.out.println(s + " matches; NumDice = " + m2.group(1) +
+                               "; DieFaces = " + m2.group(2) +
+                               ".");
+                    } else
+                    {
+                    System.out.println(s + " does not match.");
+                    }
+        }
     }
-    
-        //Regex pattern to translate the user input into three variables
-    
-    //Match a numeric value with any number of digits (\d+) that comes before any number of spaces and the letter d
-    private static Pattern getNumDice = Pattern.compile("\\d+(?=\\s*d)");
-    
-    //Match
-    private static Pattern getDieFaces = Pattern.compile("((?<=d)\\d+|(?<=d\\s)\\d+)");
-    
-    //
-    private static Pattern getConstant = Pattern.compile("(?<=[+-])\\d+|(?<=[+-]\\s)\\d+");
-    
-}
+
+ }
