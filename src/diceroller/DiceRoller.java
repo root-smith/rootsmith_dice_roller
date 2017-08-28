@@ -62,12 +62,12 @@ public class DiceRoller {
     String Remainder = SplitArray[1];
     
     
-    if (Remainder.contains("+"))
-            String[] SplitByOperator = Remainder.split("+");
-    else if (Remainder.contains("-"))
-            String[] SplitByOperator = Remainder.split("+");
+    //if (Remainder.contains("+"))
+    //        String[] SplitByOperator = Remainder.split("+");
+    //else if (Remainder.contains("-"))
+    //        String[] SplitByOperator = Remainder.split("+");
     
-    System.out.println(part1 + " " + part2);
+    //System.out.println(part1 + " " + part2);
     }
     
         //Regex pattern to translate the user input into three variables
