@@ -59,6 +59,7 @@ class DicePool
         int sum = 0;
         for (int i = 0; i < this.Results.length; i++)
             sum += this.Results[i];
+        sum += this.Constant;
         return sum;
     }
     
@@ -73,7 +74,7 @@ class DicePool
         return this.Results;
     }
     
-    public void printResults()
+    public void printLongResults()
     {
         System.out.println("Number of Dice: " + this.NumDice);
         System.out.println("Die Faces: " + this.DieFaces);
@@ -81,6 +82,13 @@ class DicePool
         System.out.println(Arrays.toString(this.Results));
         System.out.println(this.getResultSum());
     }
+    
+    public void printShortResults()
+    {
+        System.out.println("Rolled " + this.NumDice + "d" + this.DieFaces + " for a total of " + this.getResultSum());
+        System.out.println("Rolls: " + Arrays.toString(this.Results));
+    }
+    
 }
 
 public class DiceRoller
@@ -95,6 +103,7 @@ public class DiceRoller
         int NumDice = 1; //default value for number of dice to roll
         int DieFaces = 6; //default value for number of faces per die
         int Constant = 0; //default value for number to add/subtract to the result 
+        
         DicePool args_dicepool = new DicePool(NumDice,DieFaces,Constant);
         
         if (args.length == 0)
@@ -102,29 +111,17 @@ public class DiceRoller
             System.out.println("No arguments given. Using default values.");
         } else
         {
-          //checkString(args[0]);
+          checkString(args[0]);
           args_dicepool = createDicePool(args[0]);
         }
         
-        args_dicepool.printResults();
+        args_dicepool.printLongResults();
+        args_dicepool.printShortResults();
         
-        DicePool test = new DicePool(2,6,2);
-        test.printResults();
+        //DicePool test = new DicePool(2,6,2);
+        //test.printLongResults();
         
     }
-    
-
-
-    
-    //Regex patterns to split the user input into three substrings (which eventually become integers).
-    
-    //Match a numeric value with any integer of digits (\d+), then d, then another integer (\d+)
-    //ex: 12d20
-    private static Pattern RegexTwoArgs = Pattern.compile("(\\d+)d(\\d+)");
-    
-    //Match numeric value with any integer of digits (\d+), then d, then another number, then a plus or minus sign, then another integer
-    //ex: 8d6+12
-    private static Pattern RegexFourArgs = Pattern.compile("(\\d+)d(\\d+)([+-])(\\d+)");
     
     public static void checkString(String s)
     {
@@ -160,16 +157,16 @@ public class DiceRoller
         int NumDice = 0; //default value
         int DieFaces = 6; //default value
         int Constant = 0; //default value
-        int Multiplier = 0; //default value
+        int Multiplier = 100; //default value
         
         Matcher m = RegexFourArgs.matcher(toMatch);
         if (m.matches()) 
         {
             NumDice = Integer.parseInt(m.group(1));
             DieFaces = Integer.parseInt(m.group(2));
-                if (m.group(3) == "+")
+                if (m.group(3).equals("+"))
                     Multiplier = 1;
-                else if (m.group(3) == "-")
+                else if (m.group(3).equals("-"))
                     Multiplier = -1;
             Constant = Multiplier * Integer.parseInt(m.group(4));
         } else
@@ -189,6 +186,14 @@ public class DiceRoller
         return temp;
     }
     
-
+    //Regex patterns to split the user input into three substrings (which eventually become integers).
+    
+    //Match a numeric value with any integer of digits (\d+), then d, then another integer (\d+)
+    //ex: 12d20
+    private static Pattern RegexTwoArgs = Pattern.compile("(\\d+)d(\\d+)");
+    
+    //Match numeric value with any integer of digits (\d+), then d, then another number, then a plus or minus sign, then another integer
+    //ex: 8d6+12
+    private static Pattern RegexFourArgs = Pattern.compile("(\\d+)d(\\d+)([+-])(\\d+)");
     
 }
