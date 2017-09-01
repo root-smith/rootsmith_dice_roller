@@ -13,6 +13,7 @@ class DicePool
 {
     int NumDice, DieFaces, Constant;
     int[] Results;
+    String Operator;
     
     DicePool(int NumDice0, int DieFaces0, int Constant0)
     {
@@ -20,9 +21,10 @@ class DicePool
         DieFaces = DieFaces0;
         Constant = Constant0;
         Results = RollDice(NumDice0,DieFaces0);
+        Operator = (Constant0 == 0) ? "" : (Constant0 > 0) ? "+" : "-";
     }
     
-    public static int[] RollDice(int NumDice, int DieFaces)
+    public int[] RollDice(int NumDice, int DieFaces)
     {
         int DieValues[] = new int[NumDice];
         
@@ -85,7 +87,14 @@ class DicePool
     
     public void printShortResults()
     {
-        System.out.println("Rolled " + this.NumDice + "d" + this.DieFaces + " for a total of " + this.getResultSum());
+        System.out.print("Rolled " + this.NumDice + "d" + this.DieFaces);
+        
+        if (this.Constant != 0)
+        {
+            System.out.print(this.Operator + this.Constant);
+        }
+                
+        System.out.println(" for a total of " + this.getResultSum());
         System.out.println("Rolls: " + Arrays.toString(this.Results));
     }
     
@@ -104,7 +113,7 @@ public class DiceRoller
         int DieFaces = 6; //default value for number of faces per die
         int Constant = 0; //default value for number to add/subtract to the result 
         
-        DicePool args_dicepool = new DicePool(NumDice,DieFaces,Constant);
+        DicePool output_dicepool = new DicePool(NumDice,DieFaces,Constant);
         
         if (args.length == 0)
         {
@@ -112,11 +121,11 @@ public class DiceRoller
         } else
         {
           checkString(args[0]);
-          args_dicepool = createDicePool(args[0]);
+          output_dicepool = createDicePool(args[0]);
         }
         
-        args_dicepool.printLongResults();
-        args_dicepool.printShortResults();
+        output_dicepool.printLongResults();
+        output_dicepool.printShortResults();
         
         //DicePool test = new DicePool(2,6,2);
         //test.printLongResults();
